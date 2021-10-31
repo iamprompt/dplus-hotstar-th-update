@@ -1,0 +1,7 @@
+version: "3.9"
+services:
+  dplus-update:
+    context: .
+    dockerfile: Dockerfile
+  environment:
+    - DATABASE_URL={URL}
