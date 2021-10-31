@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://dplusupdate:hotstar@192.168.1.2:54320/dplus-hotstar-th-update?schema=public"
 }
 
 generator client {
