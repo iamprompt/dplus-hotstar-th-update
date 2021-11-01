@@ -2,6 +2,7 @@ import dayjs from '../utils/dayjs'
 import { isObjectEqual, onlyUnique } from '../utils'
 import { getPageTray, ParamsType } from '../utils/hotstar'
 import { prisma } from '../utils/prisma'
+import { NOTI_TYPE, sendUpdate } from './sendUpdate'
 
 export const UpdateList = async (HSPages: number[]) => {
   for (const pageNo of HSPages) {
@@ -41,7 +42,14 @@ export const UpdatePage = async (
     if ([''].includes(a.entityType)) continue
     const AssetExist = await prisma.asset.findFirst({
       where: { contentId: +a.contentId },
-      include: { assetChild: { where: { entityType: 'EPISODE' } } },
+      include: {
+        assetChild: { where: { entityType: 'EPISODE' } },
+        AssetLang: { include: { lang: true } },
+        AssetTray: { include: { tray: true } },
+        assetParent: true,
+        channel: true,
+        studio: true,
+      },
     })
     // console.log(AssetExist)
 
@@ -59,8 +67,8 @@ export const UpdatePage = async (
         'clipCnt',
       ])
       // console.log(newAsset)
-      // console.log(isEqual)
-      await prisma.asset.update({
+
+      const updateResult = await prisma.asset.update({
         where: { contentId: +a.contentId },
         data: newAsset,
         include: {
@@ -71,14 +79,22 @@ export const UpdatePage = async (
           studio: true,
         },
       })
-      // console.log(a.title, a.episodeCnt, AssetExist.assetChild.length)
-      if (
-        a.entityType === 'SHOW' &&
-        a.episodeCnt !== AssetExist.assetChild.length
-      ) {
-        console.log(AssetExist)
-        console.log(a)
+
+      if (!isEqual[0]) {
+        console.log(isEqual)
+        await sendUpdate(NOTI_TYPE.UPDATE, updateResult, AssetExist)
+        console.log(
+          `[UPDATE] Asset ${a.contentId} : ${a.title} Updated Successfully`
+        )
       }
+      // console.log(a.title, a.episodeCnt, AssetExist.assetChild.length)
+      // if (
+      //   a.entityType === 'SHOW' &&
+      //   a.episodeCnt !== AssetExist.assetChild.length
+      // ) {
+      //   console.log(AssetExist)
+      //   console.log(a)
+      // }
 
       skipDig =
         a.entityType === 'SHOW'
@@ -104,6 +120,7 @@ export const UpdatePage = async (
       console.log(
         `[NEW] Asset ${a.contentId} : ${a.title} Created Successfully`
       )
+      await sendUpdate(NOTI_TYPE.NEW, createResult)
     }
 
     if (!['CLIP'].includes(a.entityType) && depth === 1 && !skipDig) {
