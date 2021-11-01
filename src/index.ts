@@ -3,6 +3,7 @@ import { HSPageNo } from './utils/config'
 import { getDateTimeFormat, getDurationFormat } from './utils/dayjs'
 import { prisma } from './utils/prisma'
 
+/* Main Function */
 async function main() {
   await prisma.$connect()
   const startTime = Date.now()
