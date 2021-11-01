@@ -20,4 +20,6 @@ COPY --from=builder /dplus-th-update/node_modules ./node_modules
 COPY --from=builder /dplus-th-update/package*.json ./
 COPY --from=builder /dplus-th-update/build ./build
 
+ENV TZ Asia/Bangkok
+
 CMD [ "yarn", "start" ]
