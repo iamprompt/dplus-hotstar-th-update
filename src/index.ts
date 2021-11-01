@@ -25,14 +25,7 @@ async function main() {
 }
 
 ;(async () => {
-  main()
-    .catch((e) => {
-      throw e
-    })
-    .finally(async () => {
-      await prisma.$disconnect()
-    })
-  setInterval(async () => {
+  while (true) {
     main()
       .catch((e) => {
         throw e
@@ -40,5 +33,5 @@ async function main() {
       .finally(async () => {
         await prisma.$disconnect()
       })
-  }, 900000)
+  }
 })()
