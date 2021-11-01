@@ -21,5 +21,7 @@ COPY --from=builder /dplus-th-update/package*.json ./
 COPY --from=builder /dplus-th-update/build ./build
 
 ENV TZ Asia/Bangkok
+ENV DISCORD_WEBHOOK_ID ${DISCORD_WEBHOOK_ID}
+ENV DISCORD_WEBHOOK_TOKEN ${DISCORD_WEBHOOK_TOKEN}
 
 CMD [ "yarn", "start" ]

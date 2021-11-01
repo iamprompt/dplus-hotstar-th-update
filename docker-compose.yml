@@ -1,7 +1,10 @@
-version: "3.9"
+version: '3.9'
 services:
   dplus-update:
     build:
       context: .
       dockerfile: Dockerfile
-    network_mode: "host"
+    environment:
+      - DISCORD_WEBHOOK_ID=${DISCORD_WEBHOOK_ID}
+      - DISCORD_WEBHOOK_TOKEN=${DISCORD_WEBHOOK_TOKEN}
+    network_mode: 'host'
