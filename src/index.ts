@@ -3,7 +3,6 @@ import { HSPageNo } from './utils/config'
 import { getDateTimeFormat, getDurationFormat } from './utils/dayjs'
 import { prisma } from './utils/prisma'
 
-/* Main Function */
 async function main() {
   await prisma.$connect()
   const startTime = Date.now()
@@ -26,13 +25,12 @@ async function main() {
 }
 
 ;(async () => {
-  while (true) {
-    main()
-      .catch((e) => {
-        throw e
-      })
-      .finally(async () => {
-        await prisma.$disconnect()
-      })
+  try {
+    await main()
+    setInterval(main, 600000)
+  } catch (e) {
+    throw e
+  } finally {
+    await prisma.$disconnect()
   }
 })()
