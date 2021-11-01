@@ -27,7 +27,7 @@ async function main() {
 ;(async () => {
   try {
     await main()
-    setInterval(main, 600000)
+    setInterval(main, 350000)
   } catch (e) {
     throw e
   } finally {
