@@ -8,3 +8,4 @@ services:
       - DISCORD_WEBHOOK_ID=${DISCORD_WEBHOOK_ID}
       - DISCORD_WEBHOOK_TOKEN=${DISCORD_WEBHOOK_TOKEN}
     network_mode: 'host'
+    restart: always
